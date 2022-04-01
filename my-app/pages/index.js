@@ -1,4 +1,4 @@
-import { Contract, providers, ethersUtils } from "ethers";
+import { Contract, providers, utils } from "ethers";
 import Head from "next/head";
 import React, { useEffect, useRef, useState } from "react";
 import Web3Modal from "web3modal";
@@ -29,7 +29,7 @@ export default function Home() {
 
       // call the presaleMint from the contract, only whitelisted addresses would be able to mint
       const tx = await whitelistContract.presaleMint({
-        value: ethersUtils.parseEther("0.01"),
+        value: utils.parseEther("0.01"),
       });
       setLoading(true);
       await tx.wait();
@@ -55,7 +55,7 @@ export default function Home() {
       );
       // call the mint from the contract to mint the Crypto Dev
       const tx = await whitelistContract.mint({
-        value: ethersUtils.parseEther("0.01"),
+        value: utils.parseEther("0.01"),
       });
       setLoading(true);
       await tx.wait();
@@ -221,11 +221,7 @@ export default function Home() {
       throw new Error("Change network to Rinkeby");
     }
 
-    if (needSigner) {
-      const signer = web3Provider.getSigner();
-      return signer;
-    }
-    return web3Provider;
+    return needSigner ? web3Provider.getSigner() : web3Provider;
   };
 
   // Call the effect whenever the value of `walletConnected` changes
